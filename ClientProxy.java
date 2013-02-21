@@ -28,8 +28,14 @@ public class ClientProxy extends CommonProxy {
 		root.mkdir();
 		try {
 			File sample1 = new File(root, "Sample1.simple");
+			if(sample1.exists()) {
+				sample1.delete();
+			}
 			copyFromResource(sample1, "/samples/Sample1.simple");
 			File sample2 = new File(root, "Sample2.design");
+			if(sample2.exists()) {
+				sample2.delete();
+			}
 			copyFromResource(sample2, "/samples/Sample2.design");
 		} catch (IOException e) {
 			// TODO é©ìÆê∂ê¨Ç≥ÇÍÇΩ catch ÉuÉçÉbÉN
