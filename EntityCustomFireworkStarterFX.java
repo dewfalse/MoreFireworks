@@ -102,6 +102,9 @@ public class EntityCustomFireworkStarterFX extends EntityFX {
             int[] size = var14.getIntArray("Size");
 
         	float r = this.rand.nextFloat() * (float)Math.PI;
+            if(var14.hasKey("Angle")) {
+            	r = var14.getFloat("Angle");
+            }
             if (type == 1)
             {
                 this.makeSparks(0.5D, new double[][] {{0.0D, 0.0D},{0.0D, 0.1D},{0.0D, 0.2D},{0.1D, 0.1D},{0.1D, 0.0D},{0.1D, 0.1D},{0.2D, 0.2D},{0.2D, 0.1D},{0.2D, 0.0D}}, colors, fadeColors, r, trail, flicker, true, false);

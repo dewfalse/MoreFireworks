@@ -33,6 +33,7 @@ public class Recipes {
 		// custom firework recipe
 		GameRegistry.addRecipe(new RecipesCustomFirework());
 		GameRegistry.addRecipe(new RecipesCustomFireworkStar());
+		GameRegistry.addRecipe(new RecipesCustomFireworkStarAngle());
 		GameRegistry.addRecipe(new RecipesPaperCloning());
 	}
 }
