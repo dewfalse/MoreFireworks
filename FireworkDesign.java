@@ -1,5 +1,7 @@
 package morefireworks;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import net.minecraft.item.ItemDye;
 
@@ -148,5 +152,49 @@ public class FireworkDesign {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public static List<int[]> loadPngDesignFile(File file) {
+		List<int[]> lines = new ArrayList<int[]>();
+		try {
+			BufferedImage image = ImageIO.read(file);
+			int l = image.getHeight();
+			int m = image.getWidth();
+			for (int i = 0; i < l; ++i) {
+				for (int j = 0; j < m; ++j) {
+					int c = image.getRGB(i, j);
+					if ( ((c >>> 24) & 0xff) == 0x00 ) {
+						continue;
+					}
+					int down = (j + 1 < m) ? image.getRGB(i + 0,j + 1) : 0x00;
+					int left = (i + 1 < l) ? image.getRGB(i + 1,j + 0) : 0x00;
+					int dl = (j + 1 < m && i + 1 < l) ? image.getRGB(i + 1,j + 1) : 0x00;
+					int ul = (0 <= j - 1 && i + 1 < l) ? image.getRGB(i + 1,j - 1) : 0x00;
+					double hw = l / 2.0D;
+					double hh = m / 2.0D;
+					if ( (down == c) && (((down >>> 24) & 0xff) > 0x00) ) {
+						int[] line = { i, m - j, i, m - (j + 1), c };
+						lines.add(line);
+					}
+					if ( (left == c) && (((left >>> 24) & 0xff) > 0x00) ) {
+						int[] line = { i, m - j, i + 1, m - j, c };
+						lines.add(line);
+					}
+					if ( (dl == c) && (((dl >>> 24) & 0xff) > 0x00) ) {
+						int[] line = { i, m - j, i + 1, m - (j + 1), c };
+						lines.add(line);
+					}
+					if ( (ul == c) && (((ul >>> 24) & 0xff) > 0x00) ) {
+						int[] line = { i, m - j, i + 1, m - (j - 1), c };
+						lines.add(line);
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		// TODO 自動生成されたメソッド・スタブ
+		return lines;
 	}
 }

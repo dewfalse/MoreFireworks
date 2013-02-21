@@ -99,7 +99,7 @@ public class GuiRecipePaper extends GuiContainer {
 		return new FileFilter() {
 			@Override
 			public boolean accept(File file) {
-				return file.isFile() && (file.getName().endsWith(".design") || file.getName().endsWith(".simple"));
+				return file.isFile() && (file.getName().endsWith(".design") || file.getName().endsWith(".simple") || file.getName().endsWith(".png"));
 			}
 		};
 	}
@@ -163,12 +163,14 @@ public class GuiRecipePaper extends GuiContainer {
 			if(line[3] < minY) minY = line[3];
 			if(maxY < line[3]) maxY = line[3];
 		}
-		int top = 132;
-		int left = 32;
-		int width = 160;
+		int left = (width - xSize + 16) / 2;
+		int top = (height - ySize) / 2;
+		int bottom = height / 2 - 16;
+		int width = xSize;
 		int height = 80;
 		for(int[] line : lines) {
 			double t = Math.min(width / (maxX - minX + 1), height / (maxY - minY + 1));
+			t *= 0.9;
 			double startX = (line[0] - minX) * t;
 			double startY = (line[1] - minY) * t;
 			double endX = (line[2] - minX) * t;
@@ -189,12 +191,12 @@ public class GuiRecipePaper extends GuiContainer {
 				double x1 = startX + (endX - startX) * d;
 				double y1 = startY + (endY - startY) * d;
 				double x2 = startX + (endX - startX) * d + 2;
-				double y2 = startY + (endY - startY) * d - 2;
+				double y2 = startY + (endY - startY) * d + 2;
 				var9.startDrawingQuads();
-				var9.addVertex((double)top + x1, (double)left + y1, (double)this.zLevel);
-				var9.addVertex((double)top + x2, (double)left + y1, (double)this.zLevel);
-		        var9.addVertex((double)top + x2, (double)left + y2, (double)this.zLevel);
-		        var9.addVertex((double)top + x1, (double)left + y2, (double)this.zLevel);
+				var9.addVertex((double)left + x1, (double)bottom - y1, (double)this.zLevel);
+				var9.addVertex((double)left + x2, (double)bottom - y1, (double)this.zLevel);
+		        var9.addVertex((double)left + x2, (double)bottom - y2, (double)this.zLevel);
+		        var9.addVertex((double)left + x1, (double)bottom - y2, (double)this.zLevel);
 				var9.draw();
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glDisable(GL11.GL_BLEND);
@@ -249,6 +251,13 @@ public class GuiRecipePaper extends GuiContainer {
 					else if(fileList.get(selected).getName().endsWith(".simple")) {
 						if(showing != i) {
 							lines = FireworkDesign.loadSimpleDesignFile(fileList.get(selected));
+							showing = i;
+						}
+						drawDesign(lines);
+					}
+					else if(fileList.get(selected).getName().endsWith(".png")) {
+						if(showing != i) {
+							lines = FireworkDesign.loadPngDesignFile(fileList.get(selected));
 							showing = i;
 						}
 						drawDesign(lines);
